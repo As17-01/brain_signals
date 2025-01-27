@@ -11,6 +11,10 @@ class EEG:
         self.intencities = intencities
         self.n_channels = n_channels
 
+        self.ids = None
+        self.X = None
+        self.y = None
+
     def load_participant(self, participant_id: int):
         self.int = {}
         self.delta = {}
@@ -86,6 +90,6 @@ class EEG:
                 data.append(self._process_signal_type_participant(user, signal_type))
         data = pd.concat(data, axis=0).reset_index(drop=True)
 
-        X = data.iloc[:, 5:].to_numpy()
-        y = to_categorical((data["intensity"].to_numpy() * 10).astype("int"))[:, 1:]
-        return X, y
+        self.ids = data.iloc[:, :5]
+        self.X = data.iloc[:, 5:].to_numpy()
+        self.y = to_categorical((data["intensity"].to_numpy() * 10).astype("int"))[:, 1:]
