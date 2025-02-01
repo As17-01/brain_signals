@@ -6,10 +6,11 @@ from scipy import signal
 from keras.utils import to_categorical # type: ignore
 
 class EEG:
-    def __init__(self, data_dir: Path, intencities: list[float], n_channels: int):
+    def __init__(self, data_dir: Path, intencities: list[float], n_channels: int, image_name: str = "Figs for spectra"):
         self.data_dir = data_dir
         self.intencities = intencities
         self.n_channels = n_channels
+        self.image_name = image_name
 
         self.ids = None
         self.X = None
@@ -24,7 +25,8 @@ class EEG:
         self.gamma = {}
 
         for i in self.intencities:
-            self.int[i] = np.loadtxt(self.data_dir / f"Participant {participant_id}" / "Figs for spectra" / f"Backgr_int_{i}.dat")
+            file_name = f"Backgr_int_{i}.dat" if self.image_name == "Figs for spectra" else f"Backgr_int_{i}_type_0.4.dat"
+            self.int[i] = np.loadtxt(self.data_dir / f"Participant {participant_id}" / self.image_name / file_name)
             delta_signal = np.empty(self.int[i].shape)
             theta_signal =  np.empty(self.int[i].shape)
             alpha_signal = np.empty(self.int[i].shape)
@@ -92,4 +94,5 @@ class EEG:
 
         self.ids = data.iloc[:, :5]
         self.X = data.iloc[:, 5:].to_numpy()
-        self.y = to_categorical((data["intensity"].to_numpy() * 10).astype("int"))[:, 1:]
+        self.y = data["intensity"].to_numpy()
+        # self.y = to_categorical((data["intensity"].to_numpy() * 10).astype("int"))[:, 1:]
