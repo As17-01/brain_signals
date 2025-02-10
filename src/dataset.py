@@ -6,11 +6,12 @@ from scipy import signal
 from keras.utils import to_categorical # type: ignore
 
 class EEG:
-    def __init__(self, data_dir: Path, intencities: list[float], n_channels: int, image_name: str = "Figs for spectra"):
+    def __init__(self, data_dir: Path, intencities: list[float], n_channels: int, image_name: str = "Figs for spectra", use_one_hot: bool = False):
         self.data_dir = data_dir
         self.intencities = intencities
         self.n_channels = n_channels
         self.image_name = image_name
+        self.use_one_hot = use_one_hot
 
         self.ids = None
         self.X = None
@@ -99,5 +100,7 @@ class EEG:
 
         self.ids = data.iloc[:, :5]
         self.X = data.iloc[:, 5:].to_numpy()
-        self.y = data["intensity"].to_numpy()
-        # self.y = to_categorical((data["intensity"].to_numpy() * 10).astype("int"))[:, 1:]
+        if self.use_one_hot:
+            self.y = to_categorical((data["intensity"].to_numpy() * 10).astype("int"))[:, 1:]
+        else:
+            self.y = data["intensity"].to_numpy()
