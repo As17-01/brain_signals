@@ -172,6 +172,5 @@ cython_debug/
 
 *.dat
 *.docx
-*.csv
 *.m4v
 source.ipynb
