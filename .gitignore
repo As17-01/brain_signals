@@ -171,6 +171,5 @@ cython_debug/
 .pypirc
 
 *.dat
-*.docx
 *.m4v
 source.ipynb
