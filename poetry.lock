@@ -792,6 +792,16 @@ pyside6 = ["pyside6"]
 test = ["flaky", "ipyparallel", "pre-commit", "pytest (>=7.0)", "pytest-asyncio (>=0.23.5)", "pytest-cov", "pytest-timeout"]
 
 [[package]]
+name = "ipyparams"
+version = "0.2.1"
+description = "Send parameters/arguments to notebooks via URL query string parameters."
+optional = false
+python-versions = ">=3.4, <4"
+files = [
+    {file = "ipyparams-0.2.1.tar.gz", hash = "sha256:84848e26f38feef663f071657ef41b8408004eb727310b9c5f17586d04ab971c"},
+]
+
+[[package]]
 name = "ipython"
 version = "8.31.0"
 description = "IPython: Productive Interactive Computing"
@@ -2999,4 +3009,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10, <3.12"
-content-hash = "ebfe61e8218aa82eabb0bb28275a115f3b58a79e619f23add5acd61376cd0bdd"
+content-hash = "3d44aa86235bca831a4684bb6e35e8632670b716fc9f858726d4ba514fcb66c1"

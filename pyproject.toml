@@ -21,6 +21,7 @@ shap = "^0.46.0"
 keras = "^3.8.0"
 librosa = "^0.10.2.post1"
 ncps = "^1.0.1"
+ipyparams = "^0.2.1"
 
 
 [tool.poetry.group.dev.dependencies]
