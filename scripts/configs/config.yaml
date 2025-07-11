@@ -1,0 +1,11 @@
+load_dir: "../data/"
+
+id_col: "ID"
+user_col: "SubjectID"
+video_col: "VideoID"
+target_col: "predefinedlabel"
+feature_cols: ["Delta", "Theta", "Alpha1", "Alpha2", "Beta1", "Beta2", "Gamma1", "Gamma2"]
+
+defaults:
+  - training_params
+  - _self_
