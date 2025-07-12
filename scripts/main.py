@@ -4,17 +4,20 @@ import sys
 import hydra
 import numpy as np
 import pandas as pd
+import random
 import omegaconf
 import torch
 from hydra_slayer import Registry
 from loguru import logger
 from omegaconf import DictConfig
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, TensorDataset
 
 sys.path.append("../")
 
 import src.utils
 import src.preprocessing
+import src.training
+import src.models
 
 
 @hydra.main(config_path="configs", config_name="config", version_base="1.2")
@@ -30,37 +33,43 @@ def main(cfg: DictConfig) -> None:
     device = src.utils.get_default_device()
     logger.info(f"Current device is {device}")
 
-    batch_size = cfg.batch_size
-    lr = cfg.learning_rate
-    num_epochs = cfg.num_epochs
+    registry = Registry()
+    registry.add_from_module(src.models, prefix="src.models.")
+    
 
-    # cfg_dct = omegaconf.OmegaConf.to_container(cfg, resolve=True)
-    # registry = Registry()
-    # registry.add_from_module(src.datasets, prefix="src.datasets.")
-    # registry.add_from_module(src.models, prefix="src.models.")
+    for i in range(cfg.num_folds):
+        logger.info(f"Fold {i + 1} / {cfg.num_folds}")
 
-    # train_cfg = cfg_dct["dataset"].copy()
-    # train_cfg["annotation_file"] = load_dir / "train.csv"
-    # train_data = registry.get_from_params(**train_cfg)
+        # For reproducibility
+        np.random.seed(cfg.seed + i)
+        random.seed(cfg.seed + i)
+        torch.manual_seed(cfg.seed + i)
 
-    # valid_cfg = cfg_dct["dataset"].copy()
-    # valid_cfg["annotation_file"] = load_dir / "valid.csv"
-    # valid_data = registry.get_from_params(**valid_cfg)
+        unique_users = np.unique(list(user_mapping.values()))
+        train_users = np.random.choice(unique_users, 7, replace=False)
+        train_index = [index for index, user in user_mapping.items() if user in train_users]
+        test_index = [index for index, user in user_mapping.items() if user not in train_users]
 
-    # train_dataloader = DataLoader(train_data, num_workers=num_workers, batch_size=batch_size, shuffle=True)
-    # valid_dataloader = DataLoader(valid_data, num_workers=num_workers, batch_size=batch_size, shuffle=False)
+        train_features, train_target = torch.from_numpy(features[train_index]), torch.from_numpy(target[train_index])
+        test_features, test_target = torch.from_numpy(features[test_index]), torch.from_numpy(target[test_index])
 
-    # train_dataloader = src.utils.DeviceDataLoader(train_dataloader, device)
-    # valid_dataloader = src.utils.DeviceDataLoader(valid_dataloader, device)
+        train_features.to(device), train_target.to(device)
+        test_features.to(device), test_target.to(device)
 
-    # model = registry.get_from_params(**cfg_dct["model"])
-    # src.utils.to_device(model, device)
+        train_data = TensorDataset(train_features, train_target)
+        test_data = TensorDataset(test_features, test_target)
 
-    # with torch.no_grad():
-    #     model.eval()
-    #     history = [src.utils.evaluate(model, valid_dataloader)]
+        train_dataloader = DataLoader(train_data, num_workers=2, batch_size=cfg.batch_size, shuffle=True)
+        test_dataloader = DataLoader(test_data, num_workers=2, batch_size=cfg.batch_size, shuffle=False)
 
-    # history += src.utils.fit(num_epochs, lr, model, train_dataloader, valid_dataloader)
+        model = registry.get_from_params(**cfg["model"])
+        model.to(device)
+
+        logger.info("Start training...")
+        optimizer = torch.optim.Adam(model.parameters(), cfg.learning_rate)
+        history_train, history_test = src.training.fit(cfg.num_epochs, model, train_dataloader, test_dataloader, optimizer)
+        print(history_train)
+        print(history_test)
 
 
 if __name__ == "__main__":
