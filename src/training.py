@@ -22,15 +22,15 @@ def evaluate(model, loader, epoch):
     out, target = predict(model, loader)
 
     # Calculate loss
-    loss = binary_cross_entropy(out, target).numpy()[0]
+    loss = binary_cross_entropy(out, target).item()
 
     # Calculate accuracy
-    acc = accuracy(out, target).numpy()[0]
+    acc = accuracy(out, target).item()
 
     # Calculate auc
     auc_metric = BinaryAUROC()
     auc_metric.update(out.squeeze(-1), target.squeeze(-1))
-    auc = auc_metric.compute().numpy()[0]
+    auc = auc_metric.compute().item()
 
     return {"EPOCH": epoch, "LOSS": loss, "ACC": acc, "AUC": auc}
 

@@ -28,6 +28,9 @@ class GRUDefault(nn.Module):
         self.fc = nn.Linear(10, 1)
         self.sigmoid = nn.Sigmoid()
 
+    def __repr__(self):
+        return "GRUDefault"
+
     def forward(self, x):
         x = self.dropout1(x)
         x, _ = self.gru1(x)
