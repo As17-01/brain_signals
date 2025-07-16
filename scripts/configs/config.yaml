@@ -6,10 +6,8 @@ video_col: "VideoID"
 target_col: "predefinedlabel"
 feature_cols: ["Delta", "Theta", "Alpha1", "Alpha2", "Beta1", "Beta2", "Gamma1", "Gamma2"]
 
-model:
-  _target_: src.models.GRU1
-
 defaults:
   - training_params
   - experiment_setup
+  - model: ???
   - _self_

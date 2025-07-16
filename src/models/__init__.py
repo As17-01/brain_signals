@@ -1,1 +1,1 @@
-from src.models.GRU1 import GRU1
+from src.models.GRUDefault import GRUDefault

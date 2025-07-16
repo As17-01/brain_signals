@@ -1,20 +1,29 @@
 import torch.nn as nn
 
-class GRU1(nn.Module):
+
+class GRUDefault(nn.Module):
     def __init__(self):
-        super(GRU1, self).__init__()
+        super(GRUDefault, self).__init__()
 
         self.dropout1 = nn.Dropout(0.2)
-        self.gru1 = nn.GRU(input_size=8, hidden_size=20, batch_first=True, bidirectional=False)
+        self.gru1 = nn.GRU(
+            input_size=8, hidden_size=20, batch_first=True, bidirectional=False
+        )
 
         self.dropout2 = nn.Dropout(0.2)
-        self.gru2 = nn.GRU(input_size=20, hidden_size=20, batch_first=True, bidirectional=False)
+        self.gru2 = nn.GRU(
+            input_size=20, hidden_size=20, batch_first=True, bidirectional=False
+        )
 
         self.dropout3 = nn.Dropout(0.2)
-        self.gru3 = nn.GRU(input_size=20, hidden_size=10, batch_first=True, bidirectional=False)
+        self.gru3 = nn.GRU(
+            input_size=20, hidden_size=10, batch_first=True, bidirectional=False
+        )
 
         self.dropout4 = nn.Dropout(0.2)
-        self.gru4 = nn.GRU(input_size=10, hidden_size=10, batch_first=True, bidirectional=False)
+        self.gru4 = nn.GRU(
+            input_size=10, hidden_size=10, batch_first=True, bidirectional=False
+        )
 
         self.fc = nn.Linear(10, 1)
         self.sigmoid = nn.Sigmoid()

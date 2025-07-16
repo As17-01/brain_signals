@@ -17,21 +17,23 @@ def predict(model, loader):
             labels.append(target)
     return torch.cat(outputs, dim=0), torch.cat(labels, dim=0)
 
+
 def evaluate(model, loader, epoch):
     out, target = predict(model, loader)
 
     # Calculate loss
-    loss = binary_cross_entropy(out, target)  
+    loss = binary_cross_entropy(out, target).numpy()[0]
 
     # Calculate accuracy
-    acc = accuracy(out, target)  
+    acc = accuracy(out, target).numpy()[0]
 
     # Calculate auc
     auc_metric = BinaryAUROC()
     auc_metric.update(out.squeeze(-1), target.squeeze(-1))
-    auc = auc_metric.compute()
+    auc = auc_metric.compute().numpy()[0]
 
     return {"EPOCH": epoch, "LOSS": loss, "ACC": acc, "AUC": auc}
+
 
 def fit(epochs, model, train_loader, test_loader, optimizer):
     history_train = []

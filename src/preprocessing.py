@@ -12,16 +12,18 @@ def reshape_dataset(data, id_col, target_col, feature_cols):
     features = pad_sequences(features)
     return np.array(features), np.array(target).reshape(-1, 1)
 
+
 def pad_sequences(arrays, pad_value=0):
     max_length = max(arr.shape[0] for arr in arrays)
     padded_arrays = [
         np.pad(
             arr,
             ((0, max_length - arr.shape[0]), (0, 0)),
-            mode='constant',
-            constant_values=pad_value)
-            for arr in arrays
-        ]
+            mode="constant",
+            constant_values=pad_value,
+        )
+        for arr in arrays
+    ]
     return np.stack(padded_arrays)
 
 
