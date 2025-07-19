@@ -117,7 +117,11 @@ def main(cfg: DictConfig) -> None:
         model.to(device)
 
         logger.info("Start training...")
-        optimizer = torch.optim.Adam(params=model.parameters(), lr=cfg.learning_rate, weight_decay=cfg.weight_decay)
+        optimizer = torch.optim.Adam(
+            params=model.parameters(),
+            lr=cfg.learning_rate,
+            weight_decay=cfg.weight_decay,
+        )
         history_train, history_test = src.training.fit(
             cfg.num_epochs, model, train_dataloader, test_dataloader, optimizer
         )
