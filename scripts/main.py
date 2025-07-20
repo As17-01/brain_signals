@@ -93,12 +93,11 @@ def main(cfg: DictConfig) -> None:
             index for index, user in user_mapping.items() if user not in train_users
         ]
 
-        train_features, train_target = torch.from_numpy(
-            features[train_index]
-        ), torch.from_numpy(target[train_index])
-        test_features, test_target = torch.from_numpy(
-            features[test_index]
-        ), torch.from_numpy(target[test_index])
+        train_features = torch.from_numpy(features[train_index]).float().to(device)
+        train_target = torch.from_numpy(target[train_index]).float().to(device)
+
+        test_features = torch.from_numpy(features[test_index]).float().to(device)
+        test_target = torch.from_numpy(target[test_index]).float().to(device)
 
         train_data = TensorDataset(train_features, train_target)
         test_data = TensorDataset(test_features, test_target)

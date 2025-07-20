@@ -44,7 +44,7 @@ class GRUDefault(nn.Module):
         x = self.dropout4(x)
         x, _ = self.gru4(x)
 
-        x = x[:, -1, :]  # Take the last time step
+        x = x[:, -1, :]
 
         x = self.fc(x)
         x = self.sigmoid(x)

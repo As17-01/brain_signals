@@ -2,20 +2,14 @@ import torch
 from torch.nn.functional import binary_cross_entropy
 from torcheval.metrics import BinaryAUROC
 from src.metrics import accuracy
-from src.utils import get_default_device
 
 
 def predict(model, loader):
-    device = get_default_device()
-
     outputs = []
     labels = []
     with torch.no_grad():
         model.eval()
         for features, target in loader:
-            features = features.float().to(device)
-            target = target.float().to(device)
-
             outputs.append(model(features))
             labels.append(target)
     return torch.cat(outputs, dim=0), torch.cat(labels, dim=0)
@@ -39,17 +33,12 @@ def evaluate(model, loader, epoch):
 
 
 def fit(epochs, model, train_loader, test_loader, optimizer):
-    device = get_default_device()
-
     history_train = []
     history_test = []
 
     for epoch in range(epochs):
         model.train()
         for features, target in train_loader:
-            features = features.float().to(device)
-            target = target.float().to(device)
-
             out = model(features)
             loss = binary_cross_entropy(out, target)
 

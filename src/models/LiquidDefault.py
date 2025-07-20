@@ -20,7 +20,7 @@ class LiquidDefault(nn.Module):
         x, _ = self.liquid1(x)
         x, _ = self.liquid2(x)
 
-        x = x[:, -1, :]  # Take the last time step
+        x = x[:, -1, :]
 
         x = self.fc(x)
         x = self.sigmoid(x)
