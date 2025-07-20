@@ -100,6 +100,9 @@ def main(cfg: DictConfig) -> None:
             features[test_index]
         ), torch.from_numpy(target[test_index])
 
+        train_features, train_target = train_features.to(device), train_target.to(device)
+        test_features, test_target = test_features.to(device), test_target.to(device)
+
         train_data = TensorDataset(train_features, train_target)
         test_data = TensorDataset(test_features, test_target)
 
@@ -112,15 +115,12 @@ def main(cfg: DictConfig) -> None:
 
         logger.info("Start training...")
         model = registry.get_from_params(**cfg["model"])
+        model.to(device)
         optimizer = torch.optim.Adam(
             params=model.parameters(),
             lr=cfg.learning_rate,
             weight_decay=cfg.weight_decay,
         )
-
-        model.to(device)
-        train_dataloader.to(device)
-        test_dataloader.to(device)
 
         history_train, history_test = src.training.fit(
             cfg.num_epochs, model, train_dataloader, test_dataloader, optimizer
