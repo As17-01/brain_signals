@@ -9,7 +9,7 @@ class GRULag1(nn.Module):
 
         self.dropout1 = nn.Dropout(0.2)
         self.gru1 = nn.GRU(
-            input_size=8, hidden_size=20, batch_first=True, bidirectional=False
+            input_size=16, hidden_size=20, batch_first=True, bidirectional=False
         )
 
         self.dropout2 = nn.Dropout(0.2)
@@ -36,14 +36,14 @@ class GRULag1(nn.Module):
         return "GRULag1"
 
     def forward(self, x):
-        # x_lagged = torch.cat(
-        #     [
-        #         torch.zeros_like(x[:, :1, :], device=self.device),
-        #         x[:, :-1, :],
-        #     ],
-        #     dim=1
-        # )
-        # x = torch.cat([x, x_lagged], dim=2)
+        x_lagged = torch.cat(
+            [
+                torch.zeros_like(x[:, :1, :], device=self.device),
+                x[:, :-1, :],
+            ],
+            dim=1
+        )
+        x = torch.cat([x, x_lagged], dim=2)
 
         x = self.dropout1(x)
         x, _ = self.gru1(x)
