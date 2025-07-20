@@ -113,15 +113,15 @@ def main(cfg: DictConfig) -> None:
             test_data, num_workers=2, batch_size=cfg.batch_size, shuffle=False
         )
 
-        model = registry.get_from_params(**cfg["model"])
-        model.to(device)
-
         logger.info("Start training...")
+        model = registry.get_from_params(**cfg["model"])
         optimizer = torch.optim.Adam(
             params=model.parameters(),
             lr=cfg.learning_rate,
             weight_decay=cfg.weight_decay,
         )
+
+        model.to(device)
         history_train, history_test = src.training.fit(
             cfg.num_epochs, model, train_dataloader, test_dataloader, optimizer
         )
