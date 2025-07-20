@@ -93,11 +93,11 @@ def main(cfg: DictConfig) -> None:
             index for index, user in user_mapping.items() if user not in train_users
         ]
 
-        train_features = torch.from_numpy(features[train_index]).float().to(device)
-        train_target = torch.from_numpy(target[train_index]).float().to(device)
+        train_features = torch.from_numpy(features[train_index]).float()
+        train_target = torch.from_numpy(target[train_index]).float()
 
-        test_features = torch.from_numpy(features[test_index]).float().to(device)
-        test_target = torch.from_numpy(target[test_index]).float().to(device)
+        test_features = torch.from_numpy(features[test_index]).float()
+        test_target = torch.from_numpy(target[test_index]).float()
 
         train_data = TensorDataset(train_features, train_target)
         test_data = TensorDataset(test_features, test_target)
@@ -108,6 +108,13 @@ def main(cfg: DictConfig) -> None:
         test_dataloader = DataLoader(
             test_data, num_workers=2, batch_size=cfg.batch_size, shuffle=False
         )
+
+        for x, y in train_dataloader:
+            x = x.to(device, non_blocking=True)
+            y = y.to(device, non_blocking=True)
+        for x, y in test_dataloader:
+            x = x.to(device, non_blocking=True)
+            y = y.to(device, non_blocking=True)
 
         logger.info("Start training...")
         model = registry.get_from_params(**cfg["model"])
