@@ -100,9 +100,6 @@ def main(cfg: DictConfig) -> None:
             features[test_index]
         ), torch.from_numpy(target[test_index])
 
-        train_features.to(device), train_target.to(device)
-        test_features.to(device), test_target.to(device)
-
         train_data = TensorDataset(train_features, train_target)
         test_data = TensorDataset(test_features, test_target)
 
@@ -122,6 +119,9 @@ def main(cfg: DictConfig) -> None:
         )
 
         model.to(device)
+        train_dataloader.to(device)
+        test_dataloader.to(device)
+
         history_train, history_test = src.training.fit(
             cfg.num_epochs, model, train_dataloader, test_dataloader, optimizer
         )
