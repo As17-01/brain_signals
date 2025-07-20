@@ -1,1 +1,1 @@
-_target_: src.models.LSTMLag1
+_target_: src.models.LiquidLag1
