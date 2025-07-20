@@ -100,11 +100,11 @@ def main(cfg: DictConfig) -> None:
             features[test_index]
         ), torch.from_numpy(target[test_index])
 
-        train_features, train_target = train_features.to(device), train_target.to(device)
-        test_features, test_target = test_features.to(device), test_target.to(device)
-
         train_data = TensorDataset(train_features, train_target)
         test_data = TensorDataset(test_features, test_target)
+
+        train_data.to(device)
+        test_data.to(device)
 
         train_dataloader = DataLoader(
             train_data, num_workers=2, batch_size=cfg.batch_size, shuffle=True
