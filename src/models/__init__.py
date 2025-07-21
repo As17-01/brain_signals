@@ -1,3 +1,7 @@
+from src.models.BiLSTMConv50 import BiLSTMConv50
+from src.models.BiLSTMConv50D2 import BiLSTMConv50D2
+from src.models.BiLSTMDefault import BiLSTMDefault
+from src.models.BiLSTMLag1 import BiLSTMLag1
 from src.models.GRUConv50 import GRUConv50
 from src.models.GRUConv50D2 import GRUConv50D2
 from src.models.GRUDefault import GRUDefault
