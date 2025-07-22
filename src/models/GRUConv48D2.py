@@ -1,9 +1,9 @@
 import torch.nn as nn
 
 
-class BiLSTMConv50D2(nn.Module):
+class GRUConv48D2(nn.Module):
     def __init__(self):
-        super(BiLSTMConv50D2, self).__init__()
+        super(GRUConv48D2, self).__init__()
 
         self.conv1 = nn.Conv2d(
             in_channels=1,
@@ -17,30 +17,30 @@ class BiLSTMConv50D2(nn.Module):
         )
 
         self.dropout1 = nn.Dropout(0.2)
-        self.lstm1 = nn.LSTM(
-            input_size=32, hidden_size=20, batch_first=True, bidirectional=True
+        self.gru1 = nn.GRU(
+            input_size=32, hidden_size=20, batch_first=True, bidirectional=False
         )
 
         self.dropout2 = nn.Dropout(0.2)
-        self.lstm2 = nn.LSTM(
-            input_size=40, hidden_size=20, batch_first=True, bidirectional=True
+        self.gru2 = nn.GRU(
+            input_size=20, hidden_size=20, batch_first=True, bidirectional=False
         )
 
         self.dropout3 = nn.Dropout(0.2)
-        self.lstm3 = nn.LSTM(
-            input_size=40, hidden_size=10, batch_first=True, bidirectional=True
+        self.gru3 = nn.GRU(
+            input_size=20, hidden_size=10, batch_first=True, bidirectional=False
         )
 
         self.dropout4 = nn.Dropout(0.2)
-        self.lstm4 = nn.LSTM(
-            input_size=20, hidden_size=10, batch_first=True, bidirectional=True
+        self.gru4 = nn.GRU(
+            input_size=10, hidden_size=10, batch_first=True, bidirectional=False
         )
 
-        self.fc = nn.Linear(20, 1)
+        self.fc = nn.Linear(10, 1)
         self.sigmoid = nn.Sigmoid()
 
     def __repr__(self):
-        return "BiLSTMConv50D2"
+        return "GRUConv48D2"
 
     def forward(self, x):
         B, T, F = x.shape
@@ -54,16 +54,16 @@ class BiLSTMConv50D2(nn.Module):
         x = x.reshape(B, T, -1)
 
         x = self.dropout1(x)
-        x, _ = self.lstm1(x)
+        x, _ = self.gru1(x)
 
         x = self.dropout2(x)
-        x, _ = self.lstm2(x)
+        x, _ = self.gru2(x)
 
         x = self.dropout3(x)
-        x, _ = self.lstm3(x)
+        x, _ = self.gru3(x)
 
         x = self.dropout4(x)
-        x, _ = self.lstm4(x)
+        x, _ = self.gru4(x)
 
         x = x[:, -1, :]
 

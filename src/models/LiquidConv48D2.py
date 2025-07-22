@@ -3,9 +3,9 @@ from ncps.torch import LTC
 from ncps.wirings import AutoNCP
 
 
-class LiquidConv50D2(nn.Module):
+class LiquidConv48D2(nn.Module):
     def __init__(self):
-        super(LiquidConv50D2, self).__init__()
+        super(LiquidConv48D2, self).__init__()
 
         self.conv1 = nn.Conv2d(
             in_channels=1,
@@ -25,7 +25,7 @@ class LiquidConv50D2(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
     def __repr__(self):
-        return "LiquidConv50D2"
+        return "LiquidConv48D2"
 
     def forward(self, x):
         B, T, F = x.shape
