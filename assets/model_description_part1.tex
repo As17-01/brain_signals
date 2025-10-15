@@ -1,0 +1,27 @@
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{lp{10cm}}
+\toprule
+\textbf{Model} & \textbf{Description} \\
+\midrule
+\href{https://github.com/As17-01/brain_signals/blob/main/src/models/GRUDefault.py}{GRUDefault} & 4-layer unidirectional GRU network with decreasing hidden sizes (20→10) and 0.2 dropout per layer. Processes raw sequences directly without lag or convolution, producing a single sigmoid output. \\
+
+\href{https://github.com/As17-01/brain_signals/blob/main/src/models/GRULag1.py}{GRULag1} & Same as GRUDefault but augments input with a one-step lag (doubling features). Maintains 4 unidirectional GRU layers with dropout and sigmoid output. \\
+
+\href{https://github.com/As17-01/brain_signals/blob/main/src/models/LiquidDefault.py}{LiquidDefault} & 2-layer Liquid Time-constant (LTC) network using AutoNCP wirings (64→32, 32→16) for dynamic reservoir computation. Processes raw input without convolution or lag, outputting a single sigmoid prediction. \\
+
+\href{https://github.com/As17-01/brain_signals/blob/main/src/models/LiquidLag1.py}{LiquidLag1} & Similar to LiquidDefault but adds a one-step lag to the input (doubling features). Retains 2 LTC layers with AutoNCP wirings and sigmoid output. \\
+
+\href{https://github.com/As17-01/brain_signals/blob/main/src/models/BiLSTMDefault.py}{BiLSTMDefault} & 4-layer bidirectional LSTM (hidden sizes 20→10) with 0.2 dropout per layer. Processes sequences directly without convolution or lag. \\
+
+\href{https://github.com/As17-01/brain_signals/blob/main/src/models/BiLSTMLag1.py}{BiLSTMLag1} & 4-layer bidirectional LSTM that uses a one-step lag (doubling input features). Each layer has dropout, and the network produces a single sigmoid output. \\
+
+\href{https://github.com/As17-01/brain_signals/blob/main/src/models/LSTMDefault.py}{LSTMDefault} & 4-layer unidirectional LSTM with hidden sizes 20→10 and 0.2 dropout per layer. Processes sequences directly without convolution or lag, outputting a single sigmoid value. \\
+
+\href{https://github.com/As17-01/brain_signals/blob/main/src/models/LSTMLag1.py}{LSTMLag1} & 4-layer unidirectional LSTM that augments input with a one-step lag (doubling features). Each layer has dropout, outputting a single sigmoid value. \\
+\bottomrule
+\end{tabular}
+\caption{Summary of Default and Lag1 models with short descriptions highlighting key architectural differences. Each model name links to its GitHub implementation.}
+\label{tab:model_descriptions}
+\end{table}
