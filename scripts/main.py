@@ -26,14 +26,24 @@ def compose_metrics(history_list):
     for epoch in range(num_epochs):
         epoch_metrics = {}
         epoch_metrics["Epoch"] = epoch
-        epoch_metrics["LOSS"] = np.round(
+        epoch_metrics["LOSS MEAN"] = np.round(
             np.mean([history[epoch]["LOSS"] for history in history_list]), 4
         )
-        epoch_metrics["AUC"] = np.round(
+        epoch_metrics["AUC MEAN"] = np.round(
             np.mean([history[epoch]["AUC"] for history in history_list]), 4
         )
-        epoch_metrics["ACC"] = np.round(
+        epoch_metrics["ACC MEAN"] = np.round(
             np.mean([history[epoch]["ACC"] for history in history_list]), 4
+        )
+
+        epoch_metrics["LOSS STD"] = np.round(
+            np.std([history[epoch]["LOSS"] for history in history_list]), 4
+        )
+        epoch_metrics["AUC STD"] = np.round(
+            np.std([history[epoch]["AUC"] for history in history_list]), 4
+        )
+        epoch_metrics["ACC STD"] = np.round(
+            np.std([history[epoch]["ACC"] for history in history_list]), 4
         )
 
         metrics.append(epoch_metrics)
@@ -51,7 +61,7 @@ def save_results(metrics, model_name, type):
     with open(filename, "w") as f:
         for epoch, _ in enumerate(metrics):
             f.write(
-                f"Epoch {(epoch + 1)}: ACC = {metrics[epoch]['ACC']} LOSS = {metrics[epoch]['LOSS']} AUC = {metrics[epoch]['AUC']}\n"
+                f"Epoch {(epoch + 1)}: ACC = {metrics[epoch]['ACC MEAN']} std: {metrics[epoch]['ACC STD']}; LOSS = {metrics[epoch]['LOSS MEAN']} std: {metrics[epoch]['LOSS STD']}; AUC = {metrics[epoch]['AUC MEAN']} std: {metrics[epoch]['AUC STD']}\n"
             )
 
 
