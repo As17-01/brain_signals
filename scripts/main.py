@@ -86,6 +86,7 @@ def main(cfg: DictConfig) -> None:
     history_train_list = []
     history_test_list = []
 
+    # TODO: Check for unique splits. For now it is checked manually
     for i in range(cfg.num_folds):
         logger.info(f"Fold {i + 1} / {cfg.num_folds}")
 
